@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use App\Events\LogEvent;
 
-class Log extends Model
+class Log
 {
     const DEBUG = 1;
     const INFO = 2;
@@ -34,7 +34,14 @@ class Log extends Model
             PHP_EOL
         );
 
-        echo '<script>console.log("'.$message.'"); </script>';
+        $info = [
+            'level' => $level,
+            'message' => $message
+        ];
+
+        event(new LogEvent($info));
+
+        // echo '<script>console.log("'.$message.'"); </script>';
         // file_put_contents('devto.log', $message, FILE_APPEND);
     }
 
