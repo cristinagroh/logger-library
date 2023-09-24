@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Log;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,5 +15,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
+
+    $logger = new Log();
+    $logger->debug('Message from index.php');
     return view('welcome');
 });
