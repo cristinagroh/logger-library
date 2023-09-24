@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
-class Log
+use Illuminate\Database\Eloquent\Model;
+
+class Log extends Model
 {
     const DEBUG = 1;
     const INFO = 2;
@@ -18,7 +20,7 @@ class Log
 
     public function log($level, string|\Stringable $message, array $context = []): void
     {
-        if($level < config('log.minimum_log_level')){
+        if(array_search($level, Log::$levelText) < array_search(config('log.minimum_log_level'), Log::$levelText)){
             return;
         }
         $dateFormatted = (new \DateTime())->format('Y-m-d H:i:s');
