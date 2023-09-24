@@ -18,6 +18,9 @@ class Log
 
     public function log($level, string|\Stringable $message, array $context = []): void
     {
+        if($level < config('log.minimum_log_level')){
+            return;
+        }
         $dateFormatted = (new \DateTime())->format('Y-m-d H:i:s');
         $contextString = !empty($context) ? json_encode($context) : '';
         $message = sprintf(
