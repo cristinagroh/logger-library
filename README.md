@@ -1,66 +1,44 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+# Logger library exercise
 
-## About Laravel
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+This library can send logs to files, sockets, inboxes, databases and various web services depending on which handlers are defined in the application. Once the handler is created as a class and saved in the appropriate area 'app\Log\Handler\HandlerTypes' it will be selectable as a target.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Description
+The role of the project is to create a stand-alone library that has 4 declared log levels (DEBUG, INFO, WARNING, ERROR) compared to the other libraries that have 8. A log message in general is a text string with an abundance of contextual information. 
+- As a first step I wanted to log all the information in the console and declare a minimum level that can be modified in runtime;
+- Secondly, we wanted to expand the logging area by declaring some targets for each level;
+- Thirdly, I wanted each target to have a minimum level from which it can be activated;
 
-## Learning Laravel
+That said, a general config variable has been created for the minimum value to enable a log fetched from the config table. The target log manager table is to store information related to the log handler and its minimum level.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Basic Usage
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+```php
+<?php
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+use App\Log\Logger;
 
-## Laravel Sponsors
+logger = new Logger();
+$logger->info('Message from index.php');
+```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+## Set up
 
-### Premium Partners
+The config variable is set to 'debug' by default, it can be changed by accessing the main page. Loading it in the config is done when starting the application in AppServiceProvider.php
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+The target log manager table will start with the log level values ​​with the handler set to null (the target) and the minimum level set as the config variable, to 'debug', this also cand be changed by accessing the main page.
 
-## Contributing
+The information related to the handler is brought directly from the project structure, reading the dedicated folder and bringing the names of the files, in fact their names are selectable for the target.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## How it works
 
-## Code of Conduct
+For example, we want to display a log info with the text ('test'). 
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+In the config, the minimum value is set to info, in our case, the log will go to the next step because it falls within the minimum value, but if it was debug, it was avoided.
 
-## Security Vulnerabilities
+After that, all the handles where the log level falls will be detected and an event will be called. The respective event will have a listener within which the detected handlers will be activated. Laravel's events provide a simple observer pattern implementation, allowing us to subscribe and listen for various events that occur within our application, such as logging. Laravel events are synchronous, just like the whole php language is synchronous. 
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## Update
+In order for all the logs to go on the created system, namely the calling of each target in which the respective log falls, the logging.php file was modified, where a new custom channel was created that goes via the log file.
