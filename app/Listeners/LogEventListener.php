@@ -2,11 +2,7 @@
 
 namespace App\Listeners;
 
-use App\Models\Log;
-use App\Models\LogTarget;
-use Illuminate\Contracts\Queue\ShouldQueue;
-
-class LogEventListener implements ShouldQueue
+class LogEventListener
 {
     /**
      * Create the event listener.
