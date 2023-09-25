@@ -21,7 +21,7 @@ That said, a general config variable has been created for the minimum value to e
 use App\Log\Logger;
 
 logger = new Logger();
-$logger->info('Message from index.php');
+$logger->log(Logger::DEBUG, 'Message from index.php');
 ```
 
 ## Set up

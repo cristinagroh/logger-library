@@ -13,9 +13,9 @@ class LogTest extends TestCase
     public function createLog(): void
     {
         $log = new Logger();
-        $log->debug("This is a debug log");
-        $log->info("This is a info log");
-        $log->warning("This is a warning log");
-        $log->error("This is a error log");
+        $log->log(Logger::DEBUG, "This is a debug log");
+        $log->log(Logger::INFO, "This is a info log");
+        $log->log(Logger::WARNING, "This is a warning log");
+        $log->log(Logger::ERROR, "This is a error log");
     }
 }

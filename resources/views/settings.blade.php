@@ -57,7 +57,7 @@
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label>Target</label>
-                                                <select class="form-control" name="target_{{$tlm->log_name}}">
+                                                <select class="form-control" name="target_{{$tlm->id}}">
                                                 <option value="">Nothing selected</option>
                                                 @foreach ($existingHandlers as $h)
                                                     <option value="{{$h}}"
@@ -71,16 +71,27 @@
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <label>Minimum level for {{$tlm->log_name}}</label>
-                                                <select class="form-control" name="minimum_level_for_{{$tlm->log_name}}">
+                                                <label>Minimum level for target</label>
+                                                <select class="form-control" name="minimum_level_for_{{$tlm->id}}">
                                                 @foreach ($levelTextArray as $key => $level)
                                                     <option value="{{$key}}"
-                                                    @if ($key == $tlm->minimum_level)
+                                                    @if ($key == $tlm->minimum_level_for_target)
                                                         selected="selected"
                                                     @endif
                                                     >{{ucfirst($level)}}</option>
                                                 @endforeach
                                                 </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label style="margin-top: 25px;"> 
+                                                    <input type="checkbox" name="is_dedicated_{{$tlm->id}}"
+                                                    @if ($tlm->is_dedicated_target)
+                                                        checked
+                                                    @endif
+                                                    /> <b>Is dedicated just for one target</b>
+                                                </label>
                                             </div>
                                         </div>
                                     </div>
