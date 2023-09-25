@@ -18,8 +18,7 @@ return new class extends Migration
             $table->smallIncrements('id')->comment('similar to const of each log');
             $table->string('log_name', 100)->unique();
             $table->string('target', 100)->nullable();
-            $table->string('minimum_level_for_target', 100);
-            $table->boolean('is_dedicated_target')->default(false);
+            $table->unsignedInteger('minimum_level_for_target')->nullable()->comment('If no value thant the target will be dedicated');
             $table->datetime('created_at');
             $table->datetime('updated_at');
         });
@@ -31,7 +30,6 @@ return new class extends Migration
                 'id' => array_search($lvl, $logLevels),
                 'log_name' => $lvl,
                 'target' => null,
-                'minimum_level_for_target' => array_search(env('LOG_LEVEL', 'debug'), Logger::$levelText),
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s'),
             ];

@@ -4,6 +4,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="icon" href="/docs/4.0/assets/img/favicons/favicon.ico">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/4.0/examples/cover/">
 
@@ -51,7 +52,7 @@
                                     <div class="row mt-2">
                                         <div class="col-md-1">
                                             <div class="form-group">
-                                                <input class="form-control" style="margin-top: 25px;" type="text" value="{{ucfirst($tlm->log_name)}}" readonly disabled>
+                                                <input class="form-control" style="margin-top: 25px;" type="text" data-id="{{$tlm->id}}" value="{{ucfirst($tlm->log_name)}}" readonly disabled>
                                             </div>
                                         </div>
                                         <div class="col-md-3">
@@ -72,7 +73,8 @@
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label>Minimum level for target</label>
-                                                <select class="form-control" name="minimum_level_for_{{$tlm->id}}">
+                                                <select class="form-control minimum_level" data-id='{{$tlm->id}}' name="minimum_level_for_{{$tlm->id}}">
+                                                <option value="">Nothing selected</option>
                                                 @foreach ($levelTextArray as $key => $level)
                                                     <option value="{{$key}}"
                                                     @if ($key == $tlm->minimum_level_for_target)
@@ -81,17 +83,6 @@
                                                     >{{ucfirst($level)}}</option>
                                                 @endforeach
                                                 </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label style="margin-top: 25px;"> 
-                                                    <input type="checkbox" name="is_dedicated_{{$tlm->id}}"
-                                                    @if ($tlm->is_dedicated_target)
-                                                        checked
-                                                    @endif
-                                                    /> <b>Is dedicated just for one target</b>
-                                                </label>
                                             </div>
                                         </div>
                                     </div>
@@ -111,4 +102,17 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
   
 
-</body></html>
+    <script>
+        $(document).ready(function () {
+            $('.minimum_level').on('change', function(){
+                var id = $(this).attr('data-id');
+                var selected = $(this).val();
+                if(selected < id && selected != ''){
+                    alert('Value cannot be selected, this handle will never be activated for lower levels');
+                    return;
+                }
+            });
+        });
+    </script>
+    </body>
+</html>

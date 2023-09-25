@@ -55,14 +55,14 @@ class Logger extends AbstractLogger
             return;
         }
         $targetLogManager = TargetLogManager::where(function($query) use($configLogId){
-            $query->where('minimum_level_for_target', '>=', $configLogId)->where('is_dedicated_target', 0)->whereNotNull('target');
+            $query->where('minimum_level_for_target', '>=', $configLogId)->whereNotNull('target');
         })
         ->orWhere(function($query) use($level){
-            $query->where('minimum_level_for_target', '=', $level)->where('is_dedicated_target', 1)->whereNotNull('target');
+            $query->where('minimum_level_for_target', '=', $level)->whereNull('minimum_level_for_target')->whereNotNull('target');
         })
+        ->distinct()
         ->pluck('target')
         ->toArray();
-
         $this->info = [
             'message' => self::interpolate((string)$message, $context),
             'level' => self::$levelText[$level],

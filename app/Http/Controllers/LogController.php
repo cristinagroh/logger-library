@@ -14,7 +14,7 @@ class LogController extends BaseController
     public function list_()
     {
         $log = new Logger();
-        $log->log(Logger::WARNING, "This is a warning log");
+        $log->log(Logger::INFO, "This is a warning log");
         $existingHandlers = [];
         foreach (new DirectoryIterator(dirname(__FILE__, 3).'/Log/Handler/HandlerTypes/') as $file) {
             if ($file->isFile()) {
@@ -42,8 +42,7 @@ class LogController extends BaseController
                 if(isset($_POST['minimum_level_for_'.$tlm->id], $_POST['target_'.$tlm->id])){
                     TargetLogManager::where('id', $tlm->id)->update([
                         'target' => (trim($_POST['target_'.$tlm->id]) != '' ? $_POST['target_'.$tlm->id] : null), 
-                        'minimum_level_for_target' => $_POST['minimum_level_for_'.$tlm->id], 
-                        'is_dedicated_target' => isset($_POST['is_dedicated_'.$tlm->id]) ? true : false, 
+                        'minimum_level_for_target' => trim($_POST['minimum_level_for_'.$tlm->id]) != '' ? $_POST['minimum_level_for_'.$tlm->id] : null
                     ]);
                 }
             }
