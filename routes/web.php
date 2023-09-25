@@ -17,18 +17,5 @@ use App\Http\Controllers\LogController;
 |
 */
 
-Route::get('/', function () {
-
-    // $logger = new Log();
-    // $logger->info('Message from index.php');
-    // $logger->debug('Message from index.php');
-    // $logger->warning('Message from index.php');
-    // $logger->error('Message from index.php');
-    $logger = new Logger();
-
-    $logger->log(Logger::DEBUG, 'an error has occurred'); 
-    $logger->log(Logger::INFO, 'an error has occurred'); 
-    return view('welcome');
-});
-Route::get('/log', [LogController::class, 'list_'])->name('log_controller.list_');
+Route::get('/', [LogController::class, 'list_'])->name('log_controller.list_');
 Route::post('/log/edit', [LogController::class, 'edit'])->name('log_controller.edit');

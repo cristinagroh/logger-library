@@ -2,10 +2,12 @@
 
 namespace App\Log;
 
+use App\Log\Handler\LogJobHandler;
 use App\Events\LogEvent;
 use Psr\Log\AbstractLogger;
-use App\Log\Handler\HandlerInterface;
 use App\Models\TargetLogManager;
+use Monolog\Logger as MainLogger;
+use App\Log\Handler\HandlerInterface;
 
 class Logger extends AbstractLogger
 {
@@ -29,6 +31,14 @@ class Logger extends AbstractLogger
     /**
      * @var HandlerInterface
      */
+
+     public function __invoke(array $config)
+    {
+        $logger = new MainLogger('custom');
+        $handler = new LogJobHandler();
+        $logger->pushHandler($handler);
+        return $logger;
+    }
 
     public function __construct()
     {
