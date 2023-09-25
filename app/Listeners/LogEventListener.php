@@ -23,9 +23,13 @@ class LogEventListener implements ShouldQueue
     {
         //
         $targets = LogTarget::where('minimum_level', '>=',  array_search($event->log['level'], Log::$levelText))->get();
+        if(!isset($event->log) || $event->log['message'] == ''){
+            return;
+        }
         foreach($targets as $target){
             switch($target->name){
                 case LogTarget::TARGET_FILE:
+                    file_put_contents('devto.log', $event->log['message'], FILE_APPEND);
                 break;
                 case LogTarget::TARGET_DAILY_FILE:
                 break;
