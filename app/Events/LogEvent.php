@@ -2,11 +2,8 @@
 
 namespace App\Events;
 
-use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
@@ -14,14 +11,16 @@ class LogEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $log;
+    public $info;
+    public $handlers;
     /**
      * Create a new event instance.
      */
-    public function __construct($log)
+    public function __construct(array $info, array $handlers)
     {
         //
-        $this->log = $log;
+        $this->info = $info;
+        $this->handlers = $handlers;
     }
 
     /**

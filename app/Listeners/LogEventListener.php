@@ -21,24 +21,20 @@ class LogEventListener implements ShouldQueue
      */
     public function handle(object $event): void
     {
-        //
-        $targets = LogTarget::where('minimum_level', '>=',  array_search($event->log['level'], Log::$levelText))->get();
-        if(!isset($event->log) || $event->log['message'] == ''){
+        if(!isset($event->handlers, $event->info)){
             return;
         }
-        foreach($targets as $target){
-            switch($target->name){
-                case LogTarget::TARGET_FILE:
-                    file_put_contents('devto.log', $event->log['message'], FILE_APPEND);
-                break;
-                case LogTarget::TARGET_DAILY_FILE:
-                break;
-                case LogTarget::TARGET_MAIL:
-                break;
-                default:
-                    echo '<script>console.log("'.$event->log['message'].'"); </script>';
+        $handlers = $event->handlers;
+        $info = $event->info;
+        foreach($handlers as $handler){
+            if(!isset($handler)){
+                continue;
+            }
+            $class = 'App\Log\Handler\HandlerTypes\\'.$handler;
+            if (class_exists($class)) {
+                $handler = new $class;
+                $handler->handle($info);
             }
         }
-        dd($event);
     }
 }

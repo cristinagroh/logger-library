@@ -24,10 +24,7 @@ Route::get('/', function () {
     // $logger->debug('Message from index.php');
     // $logger->warning('Message from index.php');
     // $logger->error('Message from index.php');
-    $logFileName = dirname(__DIR__) . DIRECTORY_SEPARATOR . 'var' . DIRECTORY_SEPARATOR . 'log' . DIRECTORY_SEPARATOR . date('Y-m-d') . '.log';
-
-    $handler = new FileHandler($logFileName);
-    $logger = new Logger($handler);
+    $logger = new Logger();
 
     $logger->log(Logger::DEBUG, 'an error has occurred'); 
     $logger->log(Logger::INFO, 'an error has occurred'); 

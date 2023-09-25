@@ -2,8 +2,10 @@
 
 namespace App\Log;
 
+use App\Events\LogEvent;
 use Psr\Log\AbstractLogger;
 use App\Log\Handler\HandlerInterface;
+use App\Models\TargetLogManager;
 
 class Logger extends AbstractLogger
 {
@@ -21,29 +23,36 @@ class Logger extends AbstractLogger
         self::ERROR => 'error'
     ];
 
+    public $handler;
+    public $info;
+
     /**
      * @var HandlerInterface
      */
-    private $handler;
 
-    public function __construct(HandlerInterface $handler)
+    public function __construct()
     {
-        $this->handler = $handler;
+
     }
 
     public function log($level, string|\Stringable $message, array $context = []): void
     {
+        $configLogId = (int)config('log.minimum_log_level');
         if(!isset(self::$levelText[$level])){
             return;
         }
-        if($level < array_search(config('log.minimum_log_level'), self::$levelText)){
+        if($level < $configLogId){
             return;
         }
-        $this->handler->handle([
+        $targetLogManager = TargetLogManager::where('minimum_level', '>=', $configLogId)->pluck('target')->toArray();
+
+        $this->info = [
             'message' => self::interpolate((string)$message, $context),
             'level' => self::$levelText[$level],
             'timestamp' => (new \DateTimeImmutable())->format(self::DEFAULT_DATETIME_FORMAT),
-        ]);
+        ];
+
+        event(new LogEvent($this->info, $targetLogManager));
     }
 
     protected static function interpolate(string $message, array $context = []): string

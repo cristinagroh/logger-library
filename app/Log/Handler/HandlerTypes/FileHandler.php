@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Log\Handler;
+namespace App\Log\Handler\HandlerTypes;
 
 use App\Log\Handler\HandlerInterface;
+use Illuminate\Support\Facades\Storage;
 
 class FileHandler implements HandlerInterface
 {
@@ -11,8 +12,9 @@ class FileHandler implements HandlerInterface
      */
     private $filename;
 
-    public function __construct(string $filename)
+    public function __construct()
     {
+        $filename = storage_path() . DIRECTORY_SEPARATOR . 'logs' . DIRECTORY_SEPARATOR . date('Y-m-d') . '.log';
         $dir = dirname($filename);
         if (!file_exists($dir)) {
             $status = mkdir($dir, 0777, true);

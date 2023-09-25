@@ -1,9 +1,10 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
+use App\Log\Logger;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 return new class extends Migration
 {
@@ -23,7 +24,7 @@ return new class extends Migration
 
         DB::table("config")->updateOrInsert([
             'variable' => 'minimum_log_level',
-            'value' => env('LOG_LEVEL', 'debug'),
+            'value' => array_search(env('LOG_LEVEL', 'debug'), Logger::$levelText),
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s'),
         ]);
