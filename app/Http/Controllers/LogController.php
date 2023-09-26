@@ -13,8 +13,6 @@ class LogController extends BaseController
 {
     public function list_()
     {
-        $log = new Logger();
-        $log->log(Logger::INFO, "This is a warning log");
         $existingHandlers = [];
         foreach (new DirectoryIterator(dirname(__FILE__, 3).'/Log/Handler/HandlerTypes/') as $file) {
             if ($file->isFile()) {

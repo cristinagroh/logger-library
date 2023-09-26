@@ -48,6 +48,7 @@
                                 </div>
                                 <hr>
                                 <h4>Target settings</h4>
+                                <p>*If no minim level is selected for target then it is a dedicated target for the certain level.</p>
                                 @foreach ($targetLogManager as $tlm)
                                     <div class="row mt-2">
                                         <div class="col-md-1">
@@ -109,6 +110,7 @@
                 var selected = $(this).val();
                 if(selected < id && selected != ''){
                     alert('Value cannot be selected, this handle will never be activated for lower levels');
+                    $(this).val('');
                     return;
                 }
             });
